@@ -10,7 +10,9 @@ let userSchema = mongoose.Schema(
         fullName: {type: String, required: true},
         articles: [{type: ObjectId, ref: 'Article'}],
         roles: [{type: ObjectId, ref: 'Role'}],
-        salt: {type: String, required: true}
+        salt: {type: String, required: true},
+        profileImage: {type: String},
+
     }
 );
 

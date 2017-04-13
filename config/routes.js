@@ -21,5 +21,10 @@ module.exports = (app) => {
 
     app.get('/article/delete/:id', articleController.deleteGet);
     app.post('/article/delete/:id', articleController.deletePost);
+    app.get('/user/details', userController.details);
+    app.get('/user/editProfile', userController.editProfileGet);
+
+    app.post('/user/editProfile', userController.editProfilePost);
+    app.get('/user/ownArticles', userController.ownArticles);
 };
 

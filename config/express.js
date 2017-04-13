@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
-
+const fileUpload=require('express-fileupload')
 module.exports = (app, config) => {
     // View engine setup.
     app.set('views', path.join(config.rootFolder, '/views'));
@@ -13,6 +13,8 @@ module.exports = (app, config) => {
     // This set up which is the parser for the request's data.
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: true}));
+
+    app.use(fileUpload());
 
     // We will use cookies.
     app.use(cookieParser());
