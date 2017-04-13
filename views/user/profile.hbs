@@ -1,0 +1,21 @@
+<div class="container body-content">
+    <div class="row">
+        <div class="col-md-12">
+            <article>
+                <img src="{{user.profileImage}}" alt="Image" width="300px">
+                <header>
+                    <h2>Your email: {{user.email}}</h2>
+                </header>
+
+
+                <h2>
+                    Your Name: {{user.fullName}}
+                </h2>
+                <h2>Amount of articles: {{user.articles.length}}</h2>
+                <a class="btn btn-default" href='editProfile'>Change your account settings..</a>
+                <a class="btn btn-default" href='ownArticles'>See your own articles</a>
+            </article>
+
+        </div>
+    </div>
+</div>

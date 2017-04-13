@@ -1,6 +1,7 @@
 const Article=require('mongoose').model('Article');
 
 
+
 module.exports={
     createGet: (req,res)=>{
         res.render('article/create');
@@ -20,7 +21,7 @@ module.exports={
         if(errorMsg){
             res.render('article/create',{
                 error: errorMsg
-            })
+            });
             return;
         }
 
@@ -47,6 +48,7 @@ module.exports={
         Article.findById(id).then(article => {
             res.render('article/details', article);
         });
+
     },
     editGet: (req, res) => {
         let id=req.params.id;
@@ -131,5 +133,6 @@ module.exports={
                 }
             })
         })
-    }
+    },
+
 };
