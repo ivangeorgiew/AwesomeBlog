@@ -1,82 +1,72 @@
 const mongoose = require('mongoose');
-const ObjectId=mongoose.Schema.Types.ObjectId;
-const Role=mongoose.model('Role');
-const encryption = require('./../utilities/encryption');
+const encrypt = require('./../utils/encrypt');
+const ObjectId = mongoose.Schema.Types.ObjectId;
+const Role = mongoose.model('Role');
 
-let userSchema = mongoose.Schema(
-    {
-        email: {type: String, required: true, unique: true},
-        passwordHash: {type: String, required: true},
-        fullName: {type: String, required: true},
-        articles: [{type: ObjectId, ref: 'Article'}],
-        roles: [{type: ObjectId, ref: 'Role'}],
-        salt: {type: String, required: true},
-        profileImage: {type: String},
+const userSchema = mongoose.Schema({
+  email: {type: String, required: true, unique: true},
+  passwordHash: {type: String, required: true},
+  fullName: {type: String, required: true},
+  articles: [{type: ObjectId, ref: 'Article'}],
+  roles: [{type: ObjectId, ref: 'Role'}],
+  salt: {type: String, required: true},
+  profileImage: {type: String}
+});
 
-    }
-);
-
-userSchema.method ({
-   authenticate: function (password) {
-       let inputPasswordHash = encryption.hashPassword(password, this.salt);
-       let isSamePasswordHash = inputPasswordHash === this.passwordHash;
-
-       return isSamePasswordHash;
-   },
-    isAuthor: function(article) {
-        if(!article){
-            return false;
-        }
-        let id =article.author;
-
-        return this.id==id;
-    },
-    isInRole: function (roleName) {
-        return Role.findOne({name: roleName}).then(role => {
-            if(!role){
-                return false;
-            }
-            let isInRole=this.roles.indexOf(role.id)!==-1;
-            return isInRole;
-        })
-    }
+userSchema.method({
+  authenticate: function(password) {
+    let inputPasswordHash = encrypt.hashPassword(password, this.salt);
+    return inputPasswordHash === this.passwordHash;
+  },
+  isAuthor: function(article) {
+    if(!article)
+      return false;
+    else
+      return this.id === article.author;
+  },
+  isInRole: function(roleName) {
+    return Role.findOne({name: roleName}).then(function(role) {
+      if(!role)
+        return false;
+      else
+        return this.roles.indexOf(role.id) !== -1;
+    });
+  }
 });
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;
+const init = function() {
+  //create model
+  User;
 
-module.exports.initialize= () => {
+  const email = 'admin@mysite.com';
+  User.findOne({email: email}).then(function(admin) {
+    if(admin)
+      return;
 
-    let email='admin@mysite.com';
-    User.findOne({email: email}).then(admin =>{
-        if(admin){
-            return;
-        }
-        Role.findOne({name: 'Admin'}).then(role => {
-            if(!role)
-            {
-                return;
-            }
-            let salt = encryption.generateSalt();
-            let passwordHash = encryption.hashPassword('admin123456', salt);
+    Role.findOne({name: 'Admin'}).then(function(role) {
+      if(!role)
+        return;
 
-            let adminUser={
-                email: email,
-                fullName: 'Admin',
-                roles: [role.id],
-                salt: salt,
-                articles: [],
-                passwordHash: passwordHash
-            };
-            User.create(adminUser).then(user => {
-                role.users.push(user.id);
-                role.save();
-            });
-        })
+      const salt = encrypt.generateSalt();
+      const passwordHash = encrypt.hashPassword('admin123456', salt);
+
+      const adminUser = {
+        email: email,
+        fullName: 'Admin',
+        roles: [role.id],
+        salt: salt,
+        articles: [],
+        passwordHash: passwordHash
+      };
+
+      User.create(adminUser).then(function(user) {
+        role.users.push(user.id);
+        role.save();
+      });
     })
-
+  })
 };
 
-
-
+module.exports = init();
