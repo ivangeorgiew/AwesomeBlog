@@ -1,4 +1,4 @@
-/* CONSTANTS */
+/* MODULES */
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -6,34 +6,43 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
-const routes = require('./routes');
 const fileUpload = require('express-fileupload');
 const app = express();
 
 
 
 
-/* DATABASE */
-mongoose.Promise = global.Promise; 
-mongoose.connect('mongodb://localhost:27017/blog');
+/* DEV OR TEST */
+const env = 'development';
+const config = {
+  development: 'mongodb://localhost:27017/blog',
+  test: 'mongodb://localhost:27017/test'
+};
 
+
+
+
+/* DATABASE */
+mongoose.Promise = global.Promise;
+// Connect to the db
+mongoose.connect(config[env], function(err){
+  if(err)
+    console.log('Error connection to db: ' + error);
+  else
+    console.log('MongoDB ready at: ' + config[env]);
+});
+
+// Initializes the models
 require('./models/Role');
 require('./models/User');
 require('./models/Article');
 
-mongoose.connection.once('open', function(error) {
-  if(error)
-    console.log(error);
-  else
-    console.log('MongoDB ready!');
-});
 
 
 
 
 
-/* BASIC CONFIGURATION */
-
+/* EXPRESS CONFIGURATIONS */
 // View engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -54,6 +63,8 @@ app.use(session({secret: 's3cr3t5tr1ng', resave: false, saveUninitialized: false
 // For user validation we will use passport module.
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Make the current user visible for the controllers
 app.use(function(req, res, next) {
   if(req.user)
     res.locals.user = req.user;
@@ -62,6 +73,28 @@ app.use(function(req, res, next) {
 
 // This makes the content in the "public" folder accessible for every user.
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+
+/* PASSPORT */
+require('./utils/passport');
+
+
+
+
+/* ROUTES */
+const homeRouter = require('./routes/home');
+//const loginRouter = require('./routes/login');
+//const registerRouter = require('./routes/register');
+//const articleRouter = require('./routes/article');
+//const userRouter = require('./routes/user');
+
+app.use('/', homeRouter);
+//app.use('/login/', loginRouter);
+//app.use('/register/', registerRouter);
+//app.use('/user/', userRouter);
+//app.use('/article/', articleRouter);
 
 
 

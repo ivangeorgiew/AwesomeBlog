@@ -1,7 +1,42 @@
 doctype html
 html
   head
-    title= title
+    title SoftUni Blog
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/javascripts/jquery-1.10.2.js')
+    script(src='/javascripts/bootstrap.js')
   body
+    header
+      .navbar.navbar-default.navbar-fixed-top.text-uppercase
+        .container
+          .navbar-header
+            a.navbar-brand(href='/') SoftUni Blog
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+          if user
+            .navbar-collapse.collapse
+              ul.nav.navbar-nav.navbar-right.nav-pills
+                li
+                  a(href='/user/details') Welcome(#{user.email})
+                li
+                  a(href='/article/create') New Article
+                li
+                  a(href='/logout') Logout
+          else
+            .navbar-collapse.collapse
+              ul.nav.navbar-nav.navbar-right.nav-pills
+                li
+                  a(href='/register') Register
+                li
+                  a(href='/login') Login
+    |
+    if error
+      h2= error
+    |
     block content
+    |
+  footer
+    .container.modal-footer
+      p &copy; 2017 - Awesome Blogs Foungation

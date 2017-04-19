@@ -15,58 +15,47 @@ const userSchema = mongoose.Schema({
 
 userSchema.method({
   authenticate: function(password) {
-    let inputPasswordHash = encrypt.hashPassword(password, this.salt);
-    return inputPasswordHash === this.passwordHash;
+    return encrypt.hashPassword(password, this.salt) === this.passwordHash;
   },
   isAuthor: function(article) {
-    if(!article)
-      return false;
-    else
-      return this.id === article.author;
+    return (!article) ? false : this.id === article.author;
   },
   isInRole: function(roleName) {
     return Role.findOne({name: roleName}).then(function(role) {
-      if(!role)
-        return false;
-      else
-        return this.roles.indexOf(role.id) !== -1;
+      return (!role) ? false : this.roles.indexOf(role.id) !== -1;
     });
   }
 });
 
 const User = mongoose.model('User', userSchema);
 
-const init = function() {
-  //create model
-  User;
 
-  const email = 'admin@mysite.com';
-  User.findOne({email: email}).then(function(admin) {
-    if(admin)
+const email = 'admin@mysite.com';
+User.findOne({email: email}).then(function(admin) {
+  if(admin)
+    return;
+
+  Role.findOne({name: 'Admin'}).then(function(role) {
+    if(!role)
       return;
 
-    Role.findOne({name: 'Admin'}).then(function(role) {
-      if(!role)
-        return;
+    const salt = encrypt.generateSalt();
+    const passwordHash = encrypt.hashPassword('admin123456', salt);
 
-      const salt = encrypt.generateSalt();
-      const passwordHash = encrypt.hashPassword('admin123456', salt);
+    const adminUser = {
+      email: email,
+      fullName: 'Admin',
+      roles: [role.id],
+      salt: salt,
+      articles: [],
+      passwordHash: passwordHash
+    };
 
-      const adminUser = {
-        email: email,
-        fullName: 'Admin',
-        roles: [role.id],
-        salt: salt,
-        articles: [],
-        passwordHash: passwordHash
-      };
-
-      User.create(adminUser).then(function(user) {
-        role.users.push(user.id);
-        role.save();
-      });
-    })
+    User.create(adminUser).then(function(user) {
+      role.users.push(user.id);
+      role.save();
+    });
   })
-};
+});
 
-module.exports = init();
+module.exports = User;

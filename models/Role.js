@@ -6,17 +6,13 @@ const Role = mongoose.model('Role', mongoose.Schema({
   users: [{type: ObjectId, ref:'User'}]
 }));
 
-const init = function() {
-  Role;
+Role.findOne({name: 'User'}).then(function(role) {
+  if(!role)
+    Role.create({name: 'User'});
+});
+Role.findOne({name: 'Admin'}).then(function(role) {
+  if(!role)
+    Role.create({name: 'Admin'});
+});
 
-  Role.findOne({name: 'User'}).then(function(role) {
-    if(!role)
-      Role.create({name: 'User'});
-  });
-  Role.findOne({name: 'Admin'}).then(function(role) {
-    if(!role)
-      Role.create({name: 'Admin'});
-  });
-};
-
-module.exports = init();
+module.exports = Role;
