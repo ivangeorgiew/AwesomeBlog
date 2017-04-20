@@ -1,10 +1,10 @@
 Blog for SoftUni - a team effort :)
 
 /*To Dos*/
-- finish all the routes
 - finish all the views
-- add the images to the index articles
+- finish all the routes
 - check for errors and clarify further
+- fix the visual design
 - add some of your own functionality
 - do the tests
 - see how to do production
@@ -17,3 +17,5 @@ What I did for the project:
 - fixed error cathing from promises  
 - added nodemon
 - switched the from global.Promise to bluebird
+- implemented register with default profile picture
+-

@@ -10,27 +10,25 @@ const userSchema = mongoose.Schema({
   articles: [{type: ObjectId, ref: 'Article'}],
   roles: [{type: ObjectId, ref: 'Role'}],
   salt: {type: String, required: true},
-  profileImage: {type: String, required: true, default:'/images/default.jpg'}
+  profileImage: {type: String, required: true}
 });
 
-//!!!!!!!!! TRY TO REMOVE this
 userSchema.method({
-  authenticate: function(password) {
-    return encrypt.hashPassword(password, this.salt) === this.passwordHash;
+  authenticate: function(password, user) {
+    return encrypt.hashPassword(password, user.salt) === user.passwordHash;
   },
-  isAuthor: function(article) {
-    return (!article) ? false : this.id === article.author;
+  isAuthor: function(article, user) {
+    return (!article) ? false : user.id === article.author;
   },
-  isInRole: function(roleName) {
-    return Role.findOne({name: roleName})
-            .then(function(role){
-              if(!role)
-                return false;
-              return this.roles.indexOf(role.id) > -1;
-            })
-            .catch(function(err) {
-              console.log(err);
-            });
+  isInRole: function(roleName, user) {
+    return Role.findOne({name: roleName}).exec(function(error, role) {
+      if(error)
+        return console.log(error);
+      if(!role)
+        return false;
+
+      return user.roles.indexOf(role.id) > -1;
+    });
   }
 });
 
@@ -40,11 +38,14 @@ const User = mongoose.model('User', userSchema);
 const adminEmail = 'admin@mysite.com';
 const adminPass = 'admin123456';
 
-User.findOne({email: adminEmail})
-.then(function(admin) {
+User.findOne({email: adminEmail}).exec(function(error, admin) {
+  if(error)
+    return console.log(error);
   if(!admin) {
-    Role.findOne({name: 'Admin'})
-    .then(function(role) {
+    Role.findOne({name: 'Admin'}).exec(function(error, role) {
+      if(error)
+        return console.log(error);
+
       const salt = encrypt.generateSalt();
       const passwordHash = encrypt.hashPassword(adminPass, salt);
 
@@ -57,22 +58,17 @@ User.findOne({email: adminEmail})
         passwordHash: passwordHash
       };
 
-      User.create(adminUser)
-      .then(function(user) {
+      User.create(adminUser).exec(function(error, user) {
+        if(error)
+          return console.log(error);
+
         role.users.push(user.id);
-        role.save();
-      })
-      .catch(function(error) {
-        console.log(error);
+        role.save().exec(function(error) {
+          if(error) console.log(error);
+        });
       });
-    })
-    .catch(function(error) {
-      console.log(error);
     });
   }
-})
-.catch(function(error) {
-  console.log(error);
 });
 
 module.exports = User;

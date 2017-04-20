@@ -17,8 +17,7 @@ const app = express();
 const env = process.env.NODE_ENV;
 const config = {
   development: 'mongodb://localhost/blog',
-  test: 'mongodb://localhost/test',
-  production: 'mongodb://localhost/production'
+  test: 'mongodb://localhost/test'
 };
 
 
@@ -26,6 +25,7 @@ const config = {
 
 /* DATABASE */
 mongoose.Promise = require('bluebird');
+
 mongoose.connect(config[env], function(err){
   if(err)
     console.log('Error connection to db: ' + error);
@@ -63,7 +63,8 @@ app.use(session({secret: 's3cr3t5tr1ng', resave: false, saveUninitialized: false
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Make the current user visible for the controllers
+// Make the current user visible for the views
+// after login for example
 app.use(function(req, res, next) {
   if(req.user)
     res.locals.user = req.user;
@@ -85,13 +86,13 @@ require('./utils/passport');
 /* ROUTES */
 const homeRouter = require('./routes/home');
 const loginRouter = require('./routes/login');
-//const registerRouter = require('./routes/register');
+const registerRouter = require('./routes/register');
 //const articleRouter = require('./routes/article');
 //const userRouter = require('./routes/user');
 
 app.use('/', homeRouter);
 app.use('/login', loginRouter);
-//app.use('/register', registerRouter);
+app.use('/register', registerRouter);
 //app.use('/user', userRouter);
 //app.use('/article', articleRouter);
 

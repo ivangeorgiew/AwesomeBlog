@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title SoftUni Blog
+    title Awesome Blog
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='/javascripts/jquery-1.10.2.js')
     script(src='/javascripts/bootstrap.js')
@@ -10,7 +10,7 @@ html
       .navbar.navbar-default.navbar-fixed-top.text-uppercase
         .container
           .navbar-header
-            a.navbar-brand(href='/') SoftUni Blog
+            a.navbar-brand(href='/') Awesome Blog
             button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
               span.icon-bar
               span.icon-bar
@@ -23,7 +23,7 @@ html
                 li
                   a(href='/article/create') New Article
                 li
-                  a(href='/logout') Logout
+                  a(href='/user/logout') Logout
           else
             .navbar-collapse.collapse
               ul.nav.navbar-nav.navbar-right.nav-pills
@@ -38,5 +38,5 @@ html
     block content
     |
   footer
-    .container.modal-footer
-      p &copy; 2017 - Awesome Blogs Foungation
+    .container.modal-footer.navbar-fixed-bottom
+      p &copy; 2017 - Awesome Blogs Foundations

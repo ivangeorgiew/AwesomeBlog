@@ -1,29 +1,29 @@
 extends layout
 
 block content
-  .container.body-content.span8.offset2
+  .container.body-content
     .well
       form.form-horizontal(enctype='multipart/form-data', method='post', action='/register')
         fieldset
           legend Register
           .form-group
-            label.col-sm-4.control-label(for='inputEmail') Email
+            label.col-sm-4.control-label Email
             .col-sm-4
-              input#inputEmail.form-control(type='text', placeholder='Email', name='email', required, value=email)
+              input#inputEmail.form-control(type='email', name='email', placeholder='Email', required, value=email)
           .form-group
-            label.col-sm-4.control-label(for='inputFullName') Full Name
+            label.col-sm-4.control-label Full Name
             .col-sm-4
-              input#inputFullName.form-control(type='text', placeholder='Full Name', required, name='fullName', value=fullName)
+              input#inputFullName.form-control(type='text', name='fullName', placeholder='Full Name', required, value=fullName)
           .form-group
-            label.col-sm-4.control-label(for='inputPassword') Password
+            label.col-sm-4.control-label Password
             .col-sm-4
-              input#inputPassword.form-control(type='password', placeholder='Password', required, name='password')
+              input#inputPassword.form-control(type='password', name='password', placeholder='Password', required)
           .form-group
             label.col-sm-4.control-label Confirm Password
             .col-sm-4
-              input#inputPassword.form-control(type='password', placeholder='Confirm Password', required, name='repeatedPassword')
+              input#inputPassword.form-control(type='password', name='repeatedPassword', placeholder='Confirm Password', required)
           .form-group
-            label.col-sm-4.control-label(for='image') Profile Picture:
+            label.col-sm-4.control-label Profile Picture:
             .col-sm-6
               input#image.form-control(type='file', name='image')
           .form-group

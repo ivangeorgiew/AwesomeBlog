@@ -7,18 +7,15 @@ const Role = mongoose.model('Role', mongoose.Schema({
 }));
 
 const createRoles = function(nameString) {
-  Role.findOne({name: nameString})
-  .then(function(role) {
+  Role.findOne({name: nameString}).exec(function(error, role) {
+    if(error)
+      return console.log(error);
+
     if(!role) {
-      Role.create({name: nameString})
-      .then(function(){})
-      .catch(function(error){
-        console.log(error);
+      Role.create({name: nameString}).exec(function(error) {
+        if(error) console.log(error);
       });
     }
-  })
-  .catch(function(error) {
-    console.log(error);
   });
 };
 
