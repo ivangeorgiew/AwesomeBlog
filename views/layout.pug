@@ -31,9 +31,9 @@ html
                   a(href='/register') Register
                 li
                   a(href='/login') Login
-    |
     if error
-      h2= error
+      .container.body-content
+        h2= error
     |
     block content
     |

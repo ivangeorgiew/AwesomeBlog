@@ -3,11 +3,14 @@ const LocalPassport = require('passport-local');
 const User = require('mongoose').model('User');
 
 const authenticateUser = function(username, password, done) {
-  User.findOne({email: username}).then(function(user) {
-    if(!user)
-      return done(null, false);
+  User.findOne({email: username}, function(err, user) {
+    if(err) 
+      return done(err);
 
-    if(!user.authenticate(password))
+    //!!!!!!! REMOVE THIS LINE
+    console.log(user.salt, user.passwordHash);
+
+    if(!user || !user.authenticate(password))
       return done(null, false);
 
     return done(null, user);
@@ -28,12 +31,14 @@ const init = function() {
   });
 
   passport.deserializeUser(function(id, done) {
-    User.findById(id).then(function(user) {
+    User.findById(id, function(err, user) {
+      if(err)
+        return done(err);
       if(!user)
         return done(null, false)
 
-      return done(null, user);
-    })
+      return done(null, user)
+    });
   });
 };
 

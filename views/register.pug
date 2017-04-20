@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  .container.body-content.span8.offset2
+    .well
+      form.form-horizontal(enctype='multipart/form-data', method='post', action='/register')
+        fieldset
+          legend Register
+          .form-group
+            label.col-sm-4.control-label(for='inputEmail') Email
+            .col-sm-4
+              input#inputEmail.form-control(type='text', placeholder='Email', name='email', required, value=email)
+          .form-group
+            label.col-sm-4.control-label(for='inputFullName') Full Name
+            .col-sm-4
+              input#inputFullName.form-control(type='text', placeholder='Full Name', required, name='fullName', value=fullName)
+          .form-group
+            label.col-sm-4.control-label(for='inputPassword') Password
+            .col-sm-4
+              input#inputPassword.form-control(type='password', placeholder='Password', required, name='password')
+          .form-group
+            label.col-sm-4.control-label Confirm Password
+            .col-sm-4
+              input#inputPassword.form-control(type='password', placeholder='Confirm Password', required, name='repeatedPassword')
+          .form-group
+            label.col-sm-4.control-label(for='image') Profile Picture:
+            .col-sm-6
+              input#image.form-control(type='file', name='image')
+          .form-group
+            .col-sm-4.col-sm-offset-4
+              button.btn.btn-default(type='reset') Cancel
+              button.btn.btn-primary(type='submit') Submit

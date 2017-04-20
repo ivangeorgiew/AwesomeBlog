@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  .container.body-content.span8.offset2
+    .well
+      form.form-horizontal(method='post', action='/login')
+        fieldset
+          legend Login
+          .form-group
+            label.col-sm-4.control-label Email
+            .col-sm-4
+              input#inputEmail.form-control(type='text', placeholder='Email', name='email')
+          .form-group
+            label.col-sm-4.control-label Password
+            .col-sm-4
+              input#inputPassword.form-control(type='password', placeholder='Password', name='password')
+          .form-group
+            .col-sm-4.col-sm-offset-4
+              a.btn.btn-default(href='/') Cancel
+              button.btn.btn-primary(type='submit') Login

@@ -7,24 +7,25 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const fileUpload = require('express-fileupload');
+const http = require('http');
 const app = express();
 
 
 
 
 /* DEV OR TEST */
-const env = 'development';
+const env = process.env.NODE_ENV;
 const config = {
-  development: 'mongodb://localhost:27017/blog',
-  test: 'mongodb://localhost:27017/test'
+  development: 'mongodb://localhost/blog',
+  test: 'mongodb://localhost/test',
+  production: 'mongodb://localhost/production'
 };
 
 
 
 
 /* DATABASE */
-mongoose.Promise = global.Promise;
-// Connect to the db
+mongoose.Promise = require('bluebird');
 mongoose.connect(config[env], function(err){
   if(err)
     console.log('Error connection to db: ' + error);
@@ -33,11 +34,9 @@ mongoose.connect(config[env], function(err){
 });
 
 // Initializes the models
+require('./models/Article');
 require('./models/Role');
 require('./models/User');
-require('./models/Article');
-
-
 
 
 
@@ -85,19 +84,42 @@ require('./utils/passport');
 
 /* ROUTES */
 const homeRouter = require('./routes/home');
-//const loginRouter = require('./routes/login');
+const loginRouter = require('./routes/login');
 //const registerRouter = require('./routes/register');
 //const articleRouter = require('./routes/article');
 //const userRouter = require('./routes/user');
 
 app.use('/', homeRouter);
-//app.use('/login/', loginRouter);
-//app.use('/register/', registerRouter);
-//app.use('/user/', userRouter);
-//app.use('/article/', articleRouter);
+app.use('/login', loginRouter);
+//app.use('/register', registerRouter);
+//app.use('/user', userRouter);
+//app.use('/article', articleRouter);
 
 
 
 
-// Exporting for bin/www
-module.exports = app;
+/* SERVER */
+const server = http.createServer(app);
+const port = 3000;
+
+server.on('error', function(error) {
+  if(error.syscall !== 'listen')
+    throw error;
+
+  switch(error.code) {
+    case 'EACCES':
+      console.error(`Port ${port} requires more privileges`);
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(`Port ${port} is already in use`);
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+});
+
+server.listen(port, function() {
+  console.log('Listening on port ' + port);
+});

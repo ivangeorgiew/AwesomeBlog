@@ -6,6 +6,9 @@ block content
       each val in articles 
         .col-md-12
           article
+            header
+              img(width='100px', src=val.author.profileImage)
+              h2= val.title
             p= val.content
             small.author= val.author.email
             footer

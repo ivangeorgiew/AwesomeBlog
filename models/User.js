@@ -10,9 +10,10 @@ const userSchema = mongoose.Schema({
   articles: [{type: ObjectId, ref: 'Article'}],
   roles: [{type: ObjectId, ref: 'Role'}],
   salt: {type: String, required: true},
-  profileImage: {type: String}
+  profileImage: {type: String, required: true, default:'/images/default.jpg'}
 });
 
+//!!!!!!!!! TRY TO REMOVE this
 userSchema.method({
   authenticate: function(password) {
     return encrypt.hashPassword(password, this.salt) === this.passwordHash;
@@ -21,41 +22,57 @@ userSchema.method({
     return (!article) ? false : this.id === article.author;
   },
   isInRole: function(roleName) {
-    return Role.findOne({name: roleName}).then(function(role) {
-      return (!role) ? false : this.roles.indexOf(role.id) !== -1;
-    });
+    return Role.findOne({name: roleName})
+            .then(function(role){
+              if(!role)
+                return false;
+              return this.roles.indexOf(role.id) > -1;
+            })
+            .catch(function(err) {
+              console.log(err);
+            });
   }
 });
 
 const User = mongoose.model('User', userSchema);
 
+// From here on we create the admin profile and add it to the db
+const adminEmail = 'admin@mysite.com';
+const adminPass = 'admin123456';
 
-const email = 'admin@mysite.com';
-User.findOne({email: email}).then(function(admin) {
-  if(admin)
-    return;
+User.findOne({email: adminEmail})
+.then(function(admin) {
+  if(!admin) {
+    Role.findOne({name: 'Admin'})
+    .then(function(role) {
+      const salt = encrypt.generateSalt();
+      const passwordHash = encrypt.hashPassword(adminPass, salt);
 
-  Role.findOne({name: 'Admin'}).then(function(role) {
-    if(!role)
-      return;
+      const adminUser = {
+        email: adminEmail,
+        fullName: 'Admin',
+        roles: [role.id],
+        salt: salt,
+        articles: [],
+        passwordHash: passwordHash
+      };
 
-    const salt = encrypt.generateSalt();
-    const passwordHash = encrypt.hashPassword('admin123456', salt);
-
-    const adminUser = {
-      email: email,
-      fullName: 'Admin',
-      roles: [role.id],
-      salt: salt,
-      articles: [],
-      passwordHash: passwordHash
-    };
-
-    User.create(adminUser).then(function(user) {
-      role.users.push(user.id);
-      role.save();
+      User.create(adminUser)
+      .then(function(user) {
+        role.users.push(user.id);
+        role.save();
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+    })
+    .catch(function(error) {
+      console.log(error);
     });
-  })
+  }
+})
+.catch(function(error) {
+  console.log(error);
 });
 
 module.exports = User;

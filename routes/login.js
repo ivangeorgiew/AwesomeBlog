@@ -1,37 +1,37 @@
 const router = require('express').Router();
 const User = require('mongoose').model('User');
 
-const login = {
-  loginGet: function(req, res) {
-    res.render('login');
-  },
-
-  loginPost: function(req, res) {
-    User.findOne({email: req.body.email}).then(function(user) {
-      if(!user || !user.authenticate(req.body.password)) {
-        console.log(user.authenticate(req.body.password));
-        req.body.error = 'Either username or password is invalid!';
-        res.render('login', req.body);
-      } 
-      else {
-        req.logIn(user, function(err) {
-          if(err) {
-            console.log(err);
-            res.redirect('login', {error: err.message});
-            return;
-          } 
-          else {
-            let returnUrl = '/';
-            if(req.session.returnUrl){
-              returnUrl = req.session.returnUrl;
-              delete req.session.returnUrl;
-            }
-            res.redirect(returnUrl);
-          }
-        });
-      }
-    });
-  }
+const loginGet = function(req, res) {
+  res.render('login');
 };
 
-module.exports = login;
+const loginPost = function(req, res) {
+  User.findOne({email: req.body.email})
+  .then(function(user) {
+    if(!user || !user.authenticate(req.body.password))
+      res.render('login', {error: 'Username or password is invalid!'});
+
+    else {
+      req.logIn(user, function(error) {
+        if(error) 
+          res.redirect('login', {error: error.message});
+
+        else if(req.session.returnUrl) {
+          res.redirect(req.session.returnUrl);
+          delete req.session.returnUrl;
+        }
+
+        else 
+          res.redirect('/');
+      });
+    }
+  })
+  .catch(function(error) {
+    res.render('error', {error});
+  });
+};
+
+router.get('/', loginGet);
+router.post('/', loginPost);
+
+module.exports = router;

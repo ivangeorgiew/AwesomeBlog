@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "DEBUG=blog:* node ./bin/www"
+    "dev": "NODE_ENV=development nodemon ./server.js",
+    "test": "NODE_ENV=test nodemon ./server.js"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",

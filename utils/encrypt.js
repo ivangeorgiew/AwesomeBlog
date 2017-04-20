@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 
-module.exports = {
+const encrypt = {
   generateSalt: function() {
     return crypto.randomBytes(128).toString('base64');
   },
@@ -8,3 +8,5 @@ module.exports = {
     return crypto.createHmac('sha256', salt).update(password).digest('hex');
   }
 };
+
+module.exports = encrypt;
