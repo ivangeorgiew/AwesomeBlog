@@ -120,6 +120,8 @@ sub {
 }
 img {
   border: 0;
+  height: 100px;
+  max-width: 200px;
 }
 svg:not(:root) {
   overflow: hidden;
@@ -5978,6 +5980,8 @@ button.close {
 .modal-footer {
   padding: 20px;
   text-align: right;
+  color: white;
+  background-color: #2c3e50;
 }
 .modal-footer .btn + .btn {
   margin-left: 5px;
@@ -7044,15 +7048,30 @@ a.list-group-item-danger.active:focus {
 .popover {
   color: #2c3e50;
 }
-article .author {
-  margin-bottom: 0;
-}
 article .author  {
   display: block;
   font-size: 100%;
   line-height: 1.42857143;
   color: #b4bcc2;
-}
-article .author  {
+  margin-bottom: 0;
   content: '\2014 \00A0';
+}
+article {
+  height: 350px;
+}
+footer {
+  margin-top: 10px;
+}
+.pomo {
+  margin-right: 20px;
+}
+.content {
+  word-wrap: break-word;
+}
+.widt{
+  width: 100px;
+}
+.divFoot{
+  height: 100px;
+  width: 100%;
 }

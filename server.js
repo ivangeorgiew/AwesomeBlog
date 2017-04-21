@@ -87,14 +87,14 @@ require('./utils/passport');
 const homeRouter = require('./routes/home');
 const loginRouter = require('./routes/login');
 const registerRouter = require('./routes/register');
-//const articleRouter = require('./routes/article');
+const articleRouter = require('./routes/article');
 //const userRouter = require('./routes/user');
 
 app.use('/', homeRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
+app.use('/article', articleRouter);
 //app.use('/user', userRouter);
-//app.use('/article', articleRouter);
 
 
 

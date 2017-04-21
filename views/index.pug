@@ -4,13 +4,15 @@ block content
   .container.body-content
     .row
       each val in articles 
-        .col-md-12
-          article
+          article.col-md-6
             header
-              img(width='100px', src=val.author.profileImage)
+              img(src=val.author.profileImage)
               h2= val.title
-            p= val.content
+            .content
+              p= val.content
             small.author= val.author.email
-            footer
-              .pull-right
-                a.btn.btn-default.btn-xs(href='/article/details/' + val.id) Read more &raquo;
+            if user
+              if user.email === val.author.email
+                footer
+                  .pull-left
+                    a.btn.btn-default.btn-md(href='/article/edit/' + val.id) Change &raquo;

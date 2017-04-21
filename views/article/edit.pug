@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  .container.body-content
+    .well
+      form.form-horizontal(method='POST', action='/article/edit/' + id)
+        fieldset
+          legend Edit Article
+          .form-group
+            label.col-sm-4.control-label Article Title
+            .col-sm-4
+              input#articleTitle.form-control(type='text', placeholder='Article Title', value=title, name='title')
+          .form-group
+            label.col-sm-4.control-label Content
+            .col-sm-6
+              textarea#articleContent.form-control(rows='5', name='content', required)= content
+          .form-group
+            .col-sm-4.col-sm-offset-4
+              a.btn.btn-default(href='/') Cancel
+              button.btn.btn-success(type='submit', href='/article/edit/' + id) Edit

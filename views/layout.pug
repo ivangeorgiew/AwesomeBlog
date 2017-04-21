@@ -10,7 +10,7 @@ html
       .navbar.navbar-default.navbar-fixed-top.text-uppercase
         .container
           .navbar-header
-            a.navbar-brand(href='/') Awesome Blog
+            a.navbar-brand(href='/') Awesome Productions
             button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
               span.icon-bar
               span.icon-bar
@@ -23,7 +23,7 @@ html
                 li
                   a(href='/article/create') New Article
                 li
-                  a(href='/user/logout') Logout
+                  a(href='/logout') Logout
           else
             .navbar-collapse.collapse
               ul.nav.navbar-nav.navbar-right.nav-pills
@@ -34,9 +34,12 @@ html
     if error
       .container.body-content
         h2= error
-    |
     block content
     |
-  footer
-    .container.modal-footer.navbar-fixed-bottom
-      p &copy; 2017 - Awesome Blogs Foundations
+    div.divFoot
+    |
+    footer
+      .modal-footer.navbar-fixed-bottom
+        h5 
+          a.pomo(href='/pomodoroClock') Pomodoro Clock
+          | &copy; 2017 - Awesome Productions Foundation

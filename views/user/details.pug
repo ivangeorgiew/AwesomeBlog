@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  .container.body-content
+    .row
+      .col-md-12
+        article
+          img(src=user.profileImage, alt='Image', width='300px')
+          header
+            h2 Your email: #{user.email}
+          h2  Your Name: #{user.fullName}
+          h2 Amount of articles: #{user.articles.length}
+          |  
+          a.btn.btn-default(href='/user/editProfile') Change your account settings
+          |  
+          a.btn.btn-default(href='/user/ownArticles') See your own articles

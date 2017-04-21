@@ -9,8 +9,10 @@ const registerGet = function(req, res) {
 
 const registerPost = function(req, res) {
   User.findOne({email: req.body.email}).exec(function(error, user) {
-    if(error)
+    if(error) {
       console.log(error);
+      res.render('register', {error: 'Database error'});
+    }
     else if(user)
       res.render('register', {error: 'Email is already used'});
     else if(!req.body.password === req.body.repeatedPassword)
@@ -20,7 +22,7 @@ const registerPost = function(req, res) {
       const passwordHash = encrypt.hashPassword(req.body.password, salt);
 
       if(req.files.image) {
-        req.files.image.mv(`/public/images/${req.files.image.name}`, function(error) {
+        req.files.image.mv(`./public/images/${req.files.image.name}`, function(error) {
           if(error)
             console.log(error);
         });
@@ -42,15 +44,18 @@ const registerPost = function(req, res) {
         };
 
         User.create(userObject, function(error, user) {
-          if(error)
-            return console.log(error);
+          if(error) {
+            console.log(error);
+            return res.render('register', {error: 'Database error'});
+          }
 
           role.users.push(user.id);
           role.save(function(error) {
-            if(error)
-              res.render('register', {error: error.message});
-            else 
-              res.render('register', {error: 'Successfuly registered'});
+            if(error) {
+              console.log(error);
+              return res.render('register', {error: 'Database error'});
+            }
+            res.render('register', {error: 'Successfuly registered'});
           });
         });
       });

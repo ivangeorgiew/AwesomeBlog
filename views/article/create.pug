@@ -1,0 +1,20 @@
+extends ../layout
+
+block content
+  .container.body-content
+    .well
+      form.form-horizontal(method='POST', action='/article/create')
+        fieldset
+          legend New Article
+          .form-group
+            label.col-sm-4.control-label Article Title
+            .col-sm-4
+              input#articleTitle.form-control(type='text', placeholder='Article Title', name='title', required)
+          .form-group
+            label.col-sm-4.control-label Content
+            .col-sm-6
+              textarea#articleContent.form-control(rows='5', placeholder='Type text', name='content', required)
+          .form-group
+            .col-sm-4.col-sm-offset-4
+              button.btn.btn-primary.widt(type='submit') Submit
+              button.btn.btn-default.widt(type='reset') Cancel

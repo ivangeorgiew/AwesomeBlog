@@ -7,8 +7,10 @@ const loginGet = function(req, res) {
 
 const loginPost = function(req, res) {
   User.findOne({email: req.body.email}).exec(function(error, user) {
-    if(error)
+    if(error) {
       console.log(error);
+      res.render('login', {error: 'Database error'});
+    }
 
     else if(!user || !user.authenticate(req.body.password, user))
       res.render('login', {error: 'Username or password is invalid!'});
