@@ -1,6 +1,6 @@
 {
-  "name": "softuniblog",
-  "version": "0.0.0",
+  "name": "awesomeBlog",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development nodemon ./server.js",
