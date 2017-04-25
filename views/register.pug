@@ -3,25 +3,25 @@ extends layout
 block content
   .container.body-content
     .well
-      form.form-horizontal(enctype='multipart/form-data', method='post', action='/register')
+      form.form-horizontal(enctype='multipart/form-data', method='POST', action='/register')
         fieldset
           legend Register
           .form-group
             label.col-sm-4.control-label Email
             .col-sm-4
-              input#inputEmail.form-control(type='email', name='email', placeholder='Email', required, value=email)
+              input#inputEmail.form-control(maxlength='30', type='email', name='email', placeholder='your@email.here', required, value=email)
           .form-group
             label.col-sm-4.control-label Full Name
             .col-sm-4
-              input#inputFullName.form-control(type='text', name='fullName', placeholder='Full Name', required, value=fullName)
+              input#inputFullName.form-control(maxlength='30', type='text', name='fullName', placeholder='Your Full Name', required, value=fullName)
           .form-group
             label.col-sm-4.control-label Password
             .col-sm-4
-              input#inputPassword.form-control(type='password', name='password', placeholder='Password', required)
+              input#inputPassword.form-control(maxlength='30', type='password', name='password', required)
           .form-group
             label.col-sm-4.control-label Confirm Password
             .col-sm-4
-              input#inputPassword.form-control(type='password', name='repeatedPassword', placeholder='Confirm Password', required)
+              input#inputPassword.form-control(maxlength='30', type='password', name='repeatedPassword', required)
           .form-group
             label.col-sm-4.control-label Profile Picture:
             .col-sm-6
@@ -29,4 +29,4 @@ block content
           .form-group
             .col-sm-4.col-sm-offset-4
               button.btn.btn-primary.widt(type='submit') Submit
-              button.btn.btn-default.widt(type='reset') Cancel
+              a.btn.btn-default.widt(href='/') Cancel

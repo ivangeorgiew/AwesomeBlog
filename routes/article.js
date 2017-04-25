@@ -1,8 +1,11 @@
 const router = require('express').Router();
 const Article = require('mongoose').model('Article');
+const User = require('mongoose').model('User');
 
 const createGet = function(req, res) {
-  res.render('article/create');
+  if(!req.isAuthenticated())
+    return res.redirect('/');
+  return res.render('article/create');
 };
 
 const createPost = function(req, res) {
@@ -27,12 +30,67 @@ const createPost = function(req, res) {
         console.log(error);
         return res.render('article/create', {error: 'Database error'});
       }
-      res.redirect('/');
+      return res.redirect('/');
     });
   });
 };
 
+const editGet = function(req, res) {
+  if(!req.isAuthenticated())
+    return res.redirect('/');
+  Article.findById(req.params.id, function(error, article) {
+    if(error) {
+      console.log(error);
+      return res.render('index', {error: 'Database error'});
+    }
+    return res.render('article/edit', article); 
+  });
+};
+
+const editPost = function(req, res) {
+  if(!req.isAuthenticated())
+    return res.redirect('/');
+
+  Article.update({_id: req.params.id}, {$set:
+    { title: req.body.title,
+      content: req.body.content }}, function(error) {
+    if(error){
+      console.log(error);
+      return res.render('index', {error: 'Database error'});
+    }
+    return res.render('article/edit', {error: 'Updated article!',
+      title: req.body.title, content: req.body.content}
+    ); 
+  });
+};
+
+const deleteGet = function(req, res) {
+  if(!req.isAuthenticated())
+    return res.redirect('/');
+
+  Article.findByIdAndRemove(req.params.id, function(error, article) {
+    User.findById(article.author, function(error, user) {
+      if(error) {
+        console.log(error);
+        return res.render('index', {error: 'Database error'});
+      }
+      user.articles.splice(user.articles.indexOf(article.id), 1);
+      user.save(function(error) {
+        if(error) {
+          console.log(error);
+          return res.render('index', {error: 'Database error'});
+        }
+        return res.render('index', {error: 'Deleted article!'});
+      });
+    }); 
+  });
+};
+
+
 router.get('/create', createGet);
 router.post('/create', createPost);
+router.get('/edit/:id', editGet);
+router.post('/edit/:id', editPost);
+router.get('/delete/:id', deleteGet);
 
 module.exports = router;

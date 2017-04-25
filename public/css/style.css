@@ -5978,7 +5978,8 @@ button.close {
   padding: 20px;
 }
 .modal-footer {
-  padding: 20px;
+  padding: 10px;
+  padding-right: 30px;
   text-align: right;
   color: white;
   background-color: #2c3e50;
@@ -7050,20 +7051,20 @@ a.list-group-item-danger.active:focus {
 }
 article .author  {
   display: block;
-  font-size: 100%;
   line-height: 1.42857143;
   color: #b4bcc2;
-  margin-bottom: 0;
   content: '\2014 \00A0';
+}
+.author {
+  font-size: 20px;
 }
 article {
   height: 350px;
+  border-top: 3px solid #2c3e50;
+  margin-bottom: 10px;
 }
-footer {
-  margin-top: 10px;
-}
-.pomo {
-  margin-right: 20px;
+footer{
+  margin-top: 20px;
 }
 .content {
   word-wrap: break-word;
@@ -7074,4 +7075,7 @@ footer {
 .divFoot{
   height: 100px;
   width: 100%;
+}
+img {
+  margin-top: 10px;
 }

@@ -3,16 +3,17 @@ extends layout
 block content
   .container.body-content
     .row
-      each val in articles 
-          article.col-md-6
-            header
-              img(src=val.author.profileImage)
-              h2= val.title
-            .content
-              p= val.content
-            small.author= val.author.email
-            if user
-              if user.email === val.author.email
-                footer
-                  .pull-left
-                    a.btn.btn-default.btn-md(href='/article/edit/' + val.id) Change &raquo;
+      if articles
+        each val in articles 
+            article.col-md-6
+              header
+                img(src=val.author.profileImage)
+                h2= val.title
+              .content
+                p= val.content
+              h2.author= val.author.fullName
+              if user
+                if user.email === val.author.email || user.roles[1]
+                  footer
+                    .pull-left
+                      a.btn.btn-default.btn-md(href='/article/edit/' + val.id) Change &raquo;

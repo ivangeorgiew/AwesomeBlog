@@ -4,62 +4,64 @@ const User = require('mongoose').model('User');
 const Role = require('mongoose').model('Role');
 
 const registerGet = function(req, res) {
-  res.render('register');
+  return res.render('register');
 };
 
 const registerPost = function(req, res) {
-  User.findOne({email: req.body.email}).exec(function(error, user) {
+  User.findOne({email: req.body.email}, function(error, user) {
     if(error) {
       console.log(error);
-      res.render('register', {error: 'Database error'});
+      return res.render('register', {error: 'Database error'});
     }
-    else if(user)
-      res.render('register', {error: 'Email is already used'});
-    else if(!req.body.password === req.body.repeatedPassword)
-      res.render('register', {error: 'Passwords don\'t match'});
-    else {
-      const salt = encrypt.generateSalt(); 
-      const passwordHash = encrypt.hashPassword(req.body.password, salt);
+    if(user)
+      return res.render('register', {error: 'Email is already used'});
+    if(!(req.body.password === req.body.repeatedPassword))
+      return res.render('register', {error: 'Passwords don\'t match'});
 
-      if(req.files.image) {
-        req.files.image.mv(`./public/images/${req.files.image.name}`, function(error) {
-          if(error)
-            console.log(error);
-        });
-      }
+    const salt = encrypt.generateSalt(); 
+    const passwordHash = encrypt.hashPassword(req.body.password, salt);
 
-      const img = req.files.image || {name: 'default.jpg'};
+    if(req.files.image) {
+      req.files.image.mv(`./public/images/${req.files.image.name}`, function(error) {
+        if(error){
+          console.log(error);
+          return res.render('register', {error: 'Cant move img'});
+        }
+      });
+    }
 
-      Role.findOne({name: 'User'}).exec(function(error, role) {
-        if(error)
-          return console.log(error);
+    const img = req.files.image || {name: 'default.jpg'};
 
-        const userObject = {
-          email: req.body.email,
-          passwordHash: passwordHash,
-          fullName: req.body.fullName,
-          salt: salt,
-          roles: [role.id],
-          profileImage: `/images/${img.name}`
-        };
+    Role.findOne({name: 'User'}, function(error, role) {
+      if(error)
+        return console.log(error);
 
-        User.create(userObject, function(error, user) {
+      const userObject = {
+        email: req.body.email,
+        passwordHash: passwordHash,
+        fullName: req.body.fullName,
+        articles: [],
+        roles: [role.id],
+        salt: salt,
+        profileImage: `/images/${img.name}`
+      };
+
+      User.create(userObject, function(error, user) {
+        if(error) {
+          console.log(error);
+          return res.render('register', {error: 'Database error'});
+        }
+
+        role.users.push(user.id);
+        role.save(function(error) {
           if(error) {
             console.log(error);
             return res.render('register', {error: 'Database error'});
           }
-
-          role.users.push(user.id);
-          role.save(function(error) {
-            if(error) {
-              console.log(error);
-              return res.render('register', {error: 'Database error'});
-            }
-            res.render('register', {error: 'Successfuly registered'});
-          });
+          return res.render('register', {error: 'Successfuly registered'});
         });
       });
-    }
+    });
   });
 };
 

@@ -9,11 +9,11 @@ block content
           .form-group
             label.col-sm-4.control-label Email
             .col-sm-4
-              input#inputEmail.form-control(type='text', placeholder='Email', name='email')
+              input#inputEmail.form-control(maxlength= '30', type='text', placeholder='your@email.here', required, name='email')
           .form-group
             label.col-sm-4.control-label Password
             .col-sm-4
-              input#inputPassword.form-control(type='password', placeholder='Password', name='password')
+              input#inputPassword.form-control(maxlength= '30', type='password', required, name='password')
           .form-group
             .col-sm-4.col-sm-offset-4
               button.btn.btn-primary.widt(type='submit') Login

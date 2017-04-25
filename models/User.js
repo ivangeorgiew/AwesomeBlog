@@ -21,7 +21,7 @@ userSchema.method({
     return (!article) ? false : user.id === article.author;
   },
   isInRole: function(roleName, user) {
-    return Role.findOne({name: roleName}).exec(function(error, role) {
+    return Role.findOne({name: roleName}, function(error, role) {
       if(error)
         return console.log(error);
       if(!role)
@@ -38,33 +38,41 @@ const User = mongoose.model('User', userSchema);
 const adminEmail = 'admin@mysite.com';
 const adminPass = 'admin123456';
 
-User.findOne({email: adminEmail}).exec(function(error, admin) {
+User.findOne({email: adminEmail}, function(error, admin) {
   if(error)
     return console.log(error);
   if(!admin) {
-    Role.findOne({name: 'Admin'}).exec(function(error, role) {
+    Role.findOne({name: 'Admin'}, function(error, adminRole) {
       if(error)
         return console.log(error);
-
-      const salt = encrypt.generateSalt();
-      const passwordHash = encrypt.hashPassword(adminPass, salt);
-
-      const adminUser = {
-        email: adminEmail,
-        fullName: 'Admin',
-        roles: [role.id],
-        salt: salt,
-        articles: [],
-        passwordHash: passwordHash
-      };
-
-      User.create(adminUser).exec(function(error, user) {
+      Role.findOne({name: 'User'}, function(error, userRole) {
         if(error)
           return console.log(error);
 
-        role.users.push(user.id);
-        role.save().exec(function(error) {
-          if(error) console.log(error);
+        const salt = encrypt.generateSalt();
+        const passwordHash = encrypt.hashPassword(adminPass, salt);
+        const adminUser = {
+          email: adminEmail,
+          passwordHash: passwordHash,
+          fullName: 'Admin',
+          articles: [],
+          roles: [adminRole.id, userRole.id],
+          salt: salt,
+          profileImage: '/images/default.jpg'
+        };
+
+        User.create(adminUser, function(error, user) {
+          if(error)
+            return console.log(error);
+
+          adminRole.users.push(user.id);
+          adminRole.save(function(error) {
+            if(error) console.log(error);
+          });
+          userRole.users.push(user.id);
+          userRole.save(function(error) {
+            if(error) console.log(error);
+          });
         });
       });
     });

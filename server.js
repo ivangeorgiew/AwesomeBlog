@@ -1,6 +1,7 @@
 /* MODULES */
 const express = require('express');
 const path = require('path');
+const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -25,9 +26,8 @@ const config = {
 
 /* DATABASE */
 mongoose.Promise = require('bluebird');
-
-mongoose.connect(config[env], function(err){
-  if(err)
+mongoose.connect(config[env], function(error){
+  if(error)
     console.log('Error connection to db: ' + error);
   else
     console.log('MongoDB ready at: ' + config[env]);
@@ -42,9 +42,13 @@ require('./models/User');
 
 
 /* EXPRESS CONFIGURATIONS */
+
 // View engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+// Favicon
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 // Parser for the request's data
 app.use(bodyParser.json());
@@ -88,13 +92,13 @@ const homeRouter = require('./routes/home');
 const loginRouter = require('./routes/login');
 const registerRouter = require('./routes/register');
 const articleRouter = require('./routes/article');
-//const userRouter = require('./routes/user');
+const userRouter = require('./routes/user');
 
 app.use('/', homeRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/article', articleRouter);
-//app.use('/user', userRouter);
+app.use('/user', userRouter);
 
 
 
@@ -122,5 +126,5 @@ server.on('error', function(error) {
 });
 
 server.listen(port, function() {
-  console.log('Listening on port ' + port);
+  console.log(`Listening on port ${port}`);
 });

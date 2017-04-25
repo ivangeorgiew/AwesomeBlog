@@ -2,15 +2,15 @@ doctype html
 html
   head
     title Awesome Blog
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src='/javascripts/jquery-1.10.2.js')
-    script(src='/javascripts/bootstrap.js')
+    link(rel='stylesheet', href='/css/style.css')
+    //-script(src='/js/jquery-1.10.2.js')
+    //-script(src='/js/bootstrap.js')
   body
     header
-      .navbar.navbar-default.navbar-fixed-top.text-uppercase
+      .navbar.navbar-default.navbar-fixed-top
         .container
           .navbar-header
-            a.navbar-brand(href='/') Awesome Productions
+            a.navbar-brand.text-uppercase(href='/') Awesome Blog
             button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
               span.icon-bar
               span.icon-bar
@@ -19,7 +19,7 @@ html
             .navbar-collapse.collapse
               ul.nav.navbar-nav.navbar-right.nav-pills
                 li
-                  a(href='/user/details') Welcome(#{user.email})
+                  a(href='/user/details') User(#{user.email})
                 li
                   a(href='/article/create') New Article
                 li
@@ -33,13 +33,12 @@ html
                   a(href='/login') Login
     if error
       .container.body-content
-        h2= error
+        .well
+          h4= error
     block content
     |
     div.divFoot
     |
     footer
       .modal-footer.navbar-fixed-bottom
-        h5 
-          a.pomo(href='/pomodoroClock') Pomodoro Clock
-          | &copy; 2017 - Awesome Productions Foundation
+        h5 &copy; 2017 - Awesome Blog Foundation

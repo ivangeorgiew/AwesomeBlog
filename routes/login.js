@@ -2,34 +2,24 @@ const router = require('express').Router();
 const User = require('mongoose').model('User');
 
 const loginGet = function(req, res) {
-  res.render('login');
+  return res.render('login');
 };
 
 const loginPost = function(req, res) {
-  User.findOne({email: req.body.email}).exec(function(error, user) {
+  User.findOne({email: req.body.email}, function(error, user) {
     if(error) {
       console.log(error);
-      res.render('login', {error: 'Database error'});
+      return res.render('login', {error: 'Database error'});
     }
 
-    else if(!user || !user.authenticate(req.body.password, user))
-      res.render('login', {error: 'Username or password is invalid!'});
+    if(!user || !user.authenticate(req.body.password, user))
+      return res.render('login', {error: 'Username or password is invalid!'});
 
-    else {
-      req.logIn(user, function(error) {
-        if(error) 
-          res.render('login', {error: error.message});
-
-        //for edit article redirection
-        else if(req.session.returnUrl) {
-          res.redirect(req.session.returnUrl);
-          delete req.session.returnUrl;
-        }
-
-        else 
-          res.redirect('/');
-      });
-    }
+    req.logIn(user, function(error) {
+      if(error) 
+        return res.render('login', {error: 'Passport error'});
+      return res.redirect('/');
+    });
   });
 };
 
