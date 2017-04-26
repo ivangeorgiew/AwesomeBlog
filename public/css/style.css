@@ -7078,16 +7078,16 @@ img {
   margin-top: 10px;
 }
 .form-inline{
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .sup{
   display: inline-block;
   margin-bottom: 0;
   vertical-align: middle;
 }
-@media (max-width: 588px){
-  h5.sup{
+@media (max-width: 640px){
+  h4.sup{
     display: none;
   }
 }

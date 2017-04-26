@@ -2,10 +2,14 @@ const passport = require('passport');
 const LocalPassport = require('passport-local');
 const User = require('mongoose').model('User');
 
+
+
+
+/* AUTHNTICATE */
 const authenticateUser = function(username, password, done) {
-  User.findOne({email: username}, function(err, user) {
-    if(err) 
-      return done(err);
+  User.findOne({email: username}, function(error, user) {
+    if(error) 
+      return done(error);
 
     if(!user || !user.authenticate(password, user))
       return done(null, false);
@@ -14,7 +18,12 @@ const authenticateUser = function(username, password, done) {
   });
 };
 
+
+
+
+/* INITIALIZATION */
 const init = function() {
+  //passport setup as shown in the website
   passport.use(new LocalPassport({
     usernameField: 'email',
     passwordField: 'password'
@@ -28,9 +37,9 @@ const init = function() {
   });
 
   passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
-      if(err)
-        return done(err);
+    User.findById(id, function(error, user) {
+      if(error)
+        return done(error);
       if(!user)
         return done(null, false)
 
@@ -38,5 +47,8 @@ const init = function() {
     });
   });
 };
+
+
+
 
 module.exports = init();

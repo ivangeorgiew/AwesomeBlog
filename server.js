@@ -1,4 +1,3 @@
-/* MODULES */
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -25,7 +24,10 @@ const config = {
 
 
 /* DATABASE */
+//set promise
 mongoose.Promise = require('bluebird');
+
+//start mongo
 mongoose.connect(config[env], function(error){
   if(error)
     console.log('Error connection to db: ' + error);
@@ -42,7 +44,6 @@ require('./models/User');
 
 
 /* EXPRESS CONFIGURATIONS */
-
 // View engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -107,6 +108,7 @@ app.use('/user', userRouter);
 const server = http.createServer(app);
 const port = 3000;
 
+//error handling
 server.on('error', function(error) {
   if(error.syscall !== 'listen')
     throw error;

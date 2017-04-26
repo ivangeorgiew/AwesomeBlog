@@ -1,10 +1,14 @@
 doctype html
 html
   head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(name='description', content='Awesome Blog')
     title Awesome Blog
     link(rel='stylesheet', href='/css/style.css')
-    //-script(src='/js/jquery-1.10.2.js')
-    //-script(src='/js/bootstrap.js')
+    script(src='/js/jquery-1.10.2.js')
+    script(src='/js/bootstrap.js')
   body
     header
       .navbar.navbar-default.navbar-fixed-top
@@ -31,10 +35,11 @@ html
                   a(href='/register') Register
                 li
                   a(href='/login') Login
-    if error
+    if info
       .container.body-content
         .well
-          h4= error
+          h4= info
+    |
     block content
     |
     div.divFoot
@@ -47,4 +52,4 @@ html
               label.sr-only Name
               input.sup.form-control(maxlength='30', placeholder='user#name OR TitleName OR own', name='search')
               button.searchBtn.btn.btn-danger(type='submit') Search
-            h5.pull-right.sup &copy; Awesome Blog Foundation
+            h4.pull-right.sup &copy; Awesome Blog Foundation

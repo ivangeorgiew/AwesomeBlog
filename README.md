@@ -1,5 +1,18 @@
 Blog for SoftUni - a team effort :)
 
+### Installation
+1) `cd /*YOUR DIRECTORY*/`
+
+2) `git clone https://github.com/ivangeorgiew/AwesomeBlog.git`
+
+3) `npm i`
+
+4) `mongod`
+
+5) `npm run dev OR npm run test`
+
+
+
 /*To Dos*/
 - check for errors and clarify further
 - do the tests
@@ -24,3 +37,5 @@ Some of the things I did for the project:
     'own' - your articles,
     'title' - articles with this title,
     'user#name' - articles made by that user
+- commented everything
+- added no same username functionality
