@@ -1,12 +1,7 @@
 Blog for SoftUni - a team effort :)
 
 /*To Dos*/
-- add search articles option at the footer where if you type:
-    'own' - your articles,
-    'all' - all articles,
-    'title' - articles with this title
 - check for errors and clarify further
-- fix the visual design
 - do the tests
 - see how to do production
 - deploy in heroku
@@ -25,3 +20,7 @@ Some of the things I did for the project:
 - fixed the User settings changing (only pass, only img,
   both);
 - admin can edit and delete articles and still everything is working
+- add search articles option at the footer where if you type:
+    'own' - your articles,
+    'title' - articles with this title,
+    'user#name' - articles made by that user

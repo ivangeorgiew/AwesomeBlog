@@ -39,7 +39,7 @@ const registerPost = function(req, res) {
       const userObject = {
         email: req.body.email,
         passwordHash: passwordHash,
-        fullName: req.body.fullName,
+        username: req.body.username,
         articles: [],
         roles: [role.id],
         salt: salt,

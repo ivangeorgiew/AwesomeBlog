@@ -6,7 +6,7 @@ const Role = mongoose.model('Role');
 const userSchema = mongoose.Schema({
   email: {type: String, required: true, unique: true},
   passwordHash: {type: String, required: true},
-  fullName: {type: String, required: true},
+  username: {type: String, required: true},
   articles: [{type: ObjectId, ref: 'Article'}],
   roles: [{type: ObjectId, ref: 'Role'}],
   salt: {type: String, required: true},
@@ -54,7 +54,7 @@ User.findOne({email: adminEmail}, function(error, admin) {
         const adminUser = {
           email: adminEmail,
           passwordHash: passwordHash,
-          fullName: 'Admin',
+          username: 'Admin',
           articles: [],
           roles: [adminRole.id, userRole.id],
           salt: salt,

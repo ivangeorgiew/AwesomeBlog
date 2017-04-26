@@ -5,15 +5,14 @@ block content
     .row
       if articles
         each val in articles 
-            article.col-md-6
-              header
-                img(src=val.author.profileImage)
-                h2= val.title
-              .content
-                p= val.content
-              h2.author= val.author.fullName
-              if user
-                if user.email === val.author.email || user.roles[1]
-                  footer
-                    .pull-left
-                      a.btn.btn-default.btn-md(href='/article/edit/' + val.id) Change &raquo;
+          article.col-md-6
+            header
+              img(src=val.author.profileImage)
+              h2= val.title
+            .content
+              p= val.content
+            h2.author= val.author.username
+            if user
+              if user.email === val.author.email || user.roles[1]
+                footer
+                  a.btn.btn-default.btn-md(href='/article/edit/' + val.id) Change &raquo;

@@ -41,4 +41,10 @@ html
     |
     footer
       .modal-footer.navbar-fixed-bottom
-        h5 &copy; 2017 - Awesome Blog Foundation
+        .container
+          form.form-inline(autocomplete='off', method='POST', action='/search')
+            .form-group.sup
+              label.sr-only Name
+              input.sup.form-control(maxlength='30', placeholder='user#name OR TitleName OR own', name='search')
+              button.searchBtn.btn.btn-danger(type='submit') Search
+            h5.pull-right.sup &copy; Awesome Blog Foundation

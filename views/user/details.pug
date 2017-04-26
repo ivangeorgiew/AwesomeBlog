@@ -4,8 +4,8 @@ block content
   .container.body-content
     .row
       .col-md-12
-          img(src=user.profileImage, alt='Image')
+          img.details(src=user.profileImage, alt='Image')
           h3 Email: #{user.email}
-          h3 Name: #{user.fullName}
+          h3 Name: #{user.username}
           h3 Articles: #{user.articles.length}
-          a.btn.btn-default(href='/user/edit') Change settings
+          a.details.btn.btn-default(href='/user/edit') Change settings
