@@ -14,23 +14,31 @@ const Role = mongoose.model('Role', mongoose.Schema({
 
 
 /* CREATE ROLES */
-const createRoles = function(nameString) {
-  Role.findOne({name: nameString}, function(error, role) {
-    if(error)
-      return console.log(error);
-    
-    //if there isnt such role creates it
-    if(!role) {
-      Role.create({name: nameString}, function(error) {
-        if(error) 
-          return console.log(error);
-      });
-    }
-  });
-};
+Role.findOne({name: 'Admin'}, function(error, role) {
+  if(error)
+    return console.log(error);
+  
+  //if there isnt such role creates it
+  if(!role) {
+    Role.create({name: 'Admin'}, function(error) {
+      if(error) 
+        return console.log(error);
+    });
+  }
+});
 
-createRoles('User');
-createRoles('Admin');
+Role.findOne({name: 'User'}, function(error, role) {
+  if(error)
+    return console.log(error);
+  
+  //if there isnt such role creates it
+  if(!role) {
+    Role.create({name: 'User'}, function(error) {
+      if(error) 
+        return console.log(error);
+    });
+  }
+});
 
 
 

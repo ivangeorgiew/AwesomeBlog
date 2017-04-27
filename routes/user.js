@@ -1,5 +1,8 @@
 const router = require('express').Router();
 const User = require('mongoose').model('User');
+const Role = require('mongoose').model('Role');
+const Article = require('mongoose').model('Article');
+
 const encrypt = require('./../utils/encrypt');
 
 
@@ -93,10 +96,67 @@ const editPost = function(req, res) {
 
 
 
+/* DELETE USER */
+const deleteUser = function(req, res) {
+  if(!req.isAuthenticated())
+    return res.redirect('/');
+
+  //either the admin entered one or the logged in one
+  const userName = req.body.delUser || req.user.username;
+
+  return User.findOne({username: userName}, function(error, user) {
+    if(error) {
+      console.log(error);
+      return res.render('index', {info: 'Database error'});
+    }
+    //if no such user exists
+    if(!user)
+      return res.render('user/details', {user: req.user, info: 'No such user'}); 
+
+    //find and remove the user
+    return User.findByIdAndRemove(user.id, function(error, user) {
+      if(error) {
+        console.log(error);
+        return res.render('index', {info: 'Database error'});
+      }
+      //find User role
+      return Role.findOne({name: 'User'}, function(error, role) {
+        if(error) {
+          console.log(error);
+          return res.render('index', {info: 'Database error'});
+        }
+
+        //remove his articles
+        return Article.remove({author: user.id}, function(error, articles) {
+          if(error) {
+            console.log(error);
+            return res.render('index', {info: 'Database error'});
+          }
+          //remove from User role
+          role.users.splice(user.id, 1);
+          role.save(function(error) {
+            if(error) {
+              console.log(error);
+              return res.render('index', {info: 'Database error'});
+            }
+            //success
+            return res.render('index', {info: `${user.username} Deleted`});
+          });
+        });
+      });
+    });
+  });
+};
+
+
+
+
 /* ROUTER */
 router.get('/details', detailsGet);
 router.get('/edit', editGet);
 router.post('/edit', editPost);
+router.get('/delete', deleteUser);
+router.post('/delete', deleteUser);
 
 
 

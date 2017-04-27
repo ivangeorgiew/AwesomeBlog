@@ -60,7 +60,7 @@ User.findOne({email: adminEmail}, function(error, admin) {
         const adminUser = {
           email: adminEmail,
           passwordHash: passwordHash,
-          username: 'Admin',
+          username: 'admin',
           articles: [],
           roles: [adminRole.id, userRole.id],
           salt: salt,

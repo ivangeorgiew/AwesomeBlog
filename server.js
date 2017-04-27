@@ -14,8 +14,8 @@ const app = express();
 
 
 /* DEV OR TEST */
-const env = process.env.NODE_ENV;
-const config = {
+const env = process.env.NODE_ENV || 'development';
+const db = {
   development: 'mongodb://localhost/blog',
   test: 'mongodb://localhost/test'
 };
@@ -27,18 +27,19 @@ const config = {
 //set promise
 mongoose.Promise = require('bluebird');
 
-//start mongo
-mongoose.connect(config[env], function(error){
-  if(error)
-    console.log('Error connection to db: ' + error);
-  else
-    console.log('MongoDB ready at: ' + config[env]);
-});
-
 // Initializes the models
 require('./models/Article');
 require('./models/Role');
 require('./models/User');
+
+//start mongo
+mongoose.connect(db[env], function(error){
+  if(error)
+    console.log('Error connection to db: ' + error);
+  else
+    console.log('MongoDB ready at: ' + db[env]);
+});
+
 
 
 

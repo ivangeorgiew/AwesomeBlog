@@ -18,8 +18,8 @@ const showArticles = function(req, res, obj, user) {
       return res.render('index', {articles, info: req.body.search});
 
     const arts = articles.filter(function(val) {
-      return val.author.username.toLowerCase() 
-      === req.body.search.split('#')[1].toLowerCase();
+      return val.author.username 
+      === req.body.search.split('#')[1];
     });
     
     //searching by user
@@ -50,7 +50,7 @@ const logout = function(req, res) {
 /* SEARCH */
 const search = function(req, res) {
   if(!req.body.search)
-    return res.render('index', {info: 'No search value entered'});
+    return res.redirect('/');
 
   if(/#/.test(req.body.search)){
     const arr = req.body.search.split('#');
