@@ -7,25 +7,33 @@ block content
         fieldset
           legend Register
           .form-group
-            label.col-sm-4.control-label Email
+            label.col-sm-4.control-label Email *
             .col-sm-4
               input.form-control(maxlength='30', type='email', name='email', placeholder='your@email.here', required, value=email)
           .form-group
-            label.col-sm-4.control-label Username
+            label.col-sm-4.control-label Username *
             .col-sm-4
               input.form-control(maxlength='30', type='text', name='username', placeholder='Username', required, value=username)
           .form-group
-            label.col-sm-4.control-label Password
+            label.col-sm-4.control-label Sex *
+            .col-sm-4
+              select.form-control(name='gender')
+                option(value='Male') Male
+                option(value='Female') Female
+          .form-group
+            label.col-sm-4.control-label Password *
             .col-sm-4
               input.form-control(maxlength='30', type='password', name='password', required)
           .form-group
-            label.col-sm-4.control-label Confirm Password
+            label.col-sm-4.control-label Confirm Password *
             .col-sm-4
               input.form-control(maxlength='30', type='password', name='repeatedPassword', required)
           .form-group
             label.col-sm-4.control-label Profile Picture:
             .col-sm-6
               input.form-control(type='file', name='image')
+          .form-group
+            label.col-sm-6.control-label The fields with * are mandatory
           .form-group
             .col-sm-4.col-sm-offset-4
               button.btn.btn-primary.widt(type='submit') Submit

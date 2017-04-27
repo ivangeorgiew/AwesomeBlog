@@ -14,7 +14,8 @@ const userSchema = mongoose.Schema({
   articles: [{type: ObjectId, ref: 'Article'}],
   roles: [{type: ObjectId, ref: 'Role'}],
   salt: {type: String, required: true},
-  profileImage: {type: String, required: true}
+  profileImage: {type: String, required: true},
+  gender: {type: String, required: true},
 });
 
 
@@ -64,7 +65,8 @@ User.findOne({email: adminEmail}, function(error, admin) {
           articles: [],
           roles: [adminRole.id, userRole.id],
           salt: salt,
-          profileImage: '/images/default.jpg'
+          profileImage: '/images/profilepictures/maleDefault.jpg',
+          gender:'Male'
         };
 
         //adding to User collection

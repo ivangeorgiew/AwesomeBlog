@@ -42,17 +42,35 @@ const registerPost = function(req, res) {
         return res.render('register', {info: 'Passwords don\'t match'});
       
       //if image is uploaded
-      if(req.files.image) {
-        req.files.image.name = req.body.username + req.files.image.name;
-        req.files.image.mv(`./public/images/${req.files.image.name}`, function(error) {
-          if(error){
-            console.log(error);
-            return res.render('register', {info: 'Cant move img'});
-          }
-        });
-      }
 
-      const img = req.files.image || {name: 'default.jpg'};
+        if(req.files.image) {
+
+            let index=req.files.image.name.lastIndexOf('.');
+            let name=req.files.image.name.substring(0,index);
+            let extension=req.files.image.name.substring(index+1);
+            let randomChars=encrypt.generateSalt().substring(0,5);
+            var filename=`${name}_${randomChars}.${extension}`;
+            let indexoferror=filename.lastIndexOf('/');
+            if(indexoferror!==-1){
+                filename.replace("/", "M");
+            }
+            req.files.image.mv(`./public/images/profilepictures/${filename}`, function(error) {
+                if(error){
+                    console.log(error);
+                    return res.render('register', {info: 'Cant move img'});
+                }
+            });
+        }
+        else{
+            if(req.body.gender=='Male'){
+                filename='maleDefault.jpg';
+            }
+            else{
+                filename='femaleDefault.jpg';
+            }
+        }
+
+
       const salt = encrypt.generateSalt(); 
       const passwordHash = encrypt.hashPassword(req.body.password, salt);
 
@@ -70,7 +88,8 @@ const registerPost = function(req, res) {
           articles: [],
           roles: [role.id],
           salt: salt,
-          profileImage: `/images/${img.name}`
+          profileImage: `/images/profilepictures/${filename}`,
+          gender: req.body.gender
         };
 
         //create user
@@ -88,7 +107,7 @@ const registerPost = function(req, res) {
               return res.render('register', {info: 'Database error'});
             }
             //success
-            return res.render('register', {info: 'Successfuly registered'});
+            return res.redirect('login');
           });
         });
       });

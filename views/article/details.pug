@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+    .container.body-content
+        .row
+            article.col-md-6
+                header
+                    img(src=author.profileImage, height='200px')
+                    h2= title
+                    .content
+                    p= content
+                if picture
+                         img(src=picture , width='1800px' , height='1300px')
+                h2.author= author.username
+                footer
+                a.btn.btn-default.btn-md(href='/') Back &raquo;
+

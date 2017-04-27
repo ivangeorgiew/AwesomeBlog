@@ -10,6 +10,7 @@ const Article = mongoose.model('Article', mongoose.Schema({
   content: {type: String, required: true},
   author: {type: ObjectId, required: true, ref: 'User'},
   date: {type: Date, default: Date.now()},
+  picture: {type: String, required: false}
 }));
 
 
