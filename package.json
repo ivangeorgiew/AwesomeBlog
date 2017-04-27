@@ -1,7 +1,10 @@
 {
   "name": "awesomeBlog",
   "version": "1.0.0",
-  "private": true,
+  "description": "A blog project",
+  "main": "server.js",
+  "author": "ivangeorgiew",
+  "license": "MIT",
   "scripts": {
     "dev": "NODE_ENV=development nodemon ./server.js",
     "test": "NODE_ENV=test nodemon ./server.js"
@@ -14,10 +17,14 @@
     "express": "~4.15.2",
     "express-fileupload": "^0.1.2",
     "express-session": "^1.15.2",
+    "fs": "0.0.1-security",
     "mongoose": "^4.9.4",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pug": "~2.0.0-beta11",
     "serve-favicon": "^2.4.2"
+  },
+  "engines": {
+    "node": "6.9.1"
   }
 }

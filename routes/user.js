@@ -2,8 +2,8 @@ const router = require('express').Router();
 const User = require('mongoose').model('User');
 const Role = require('mongoose').model('Role');
 const Article = require('mongoose').model('Article');
-
 const encrypt = require('./../utils/encrypt');
+const fs = require('fs');
 
 
 
@@ -48,13 +48,23 @@ const editPost = function(req, res) {
       function(error) {
       if(error) {
         console.log(error);
-        return res.render('index', {info: 'Database error'});
+        return res.render('user/edit', {info: 'Database error'});
       }
     });
   };
 
   //img update function
   const updateImg = function() {
+    //removes old image
+    if(req.user.profileImage !== '/images/default.jpg') {
+      fs.unlink(`./public${req.user.profileImage}`,
+        function(error) {
+        if(error)
+          console.log(error);
+      });
+    }
+    //moves the new image
+    img.name = req.user.username + img.name;
     img.mv(`./public/images/${img.name}`, function(error) {
       if(error) {
         console.log(error);
@@ -66,7 +76,7 @@ const editPost = function(req, res) {
       function(error) {
       if(error) {
         console.log(error);
-        return res.render('index', {info: 'Database error'});
+        return res.render('user/edit', {info: 'Database error'});
       }
     });
   };

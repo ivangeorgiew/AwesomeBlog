@@ -16,7 +16,7 @@ const loginPost = function(req, res) {
       return res.render('login', {info: 'Database error'});
     }
     if(!user || !user.authenticate(req.body.password, user))
-      return res.render('login', {info: 'Username or password is invalid!'});
+      return res.render('login', {info: 'Email or password is invalid!'});
 
     return req.logIn(user, function(error) {
       if(error) {

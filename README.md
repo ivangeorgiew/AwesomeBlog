@@ -22,7 +22,7 @@ If you are using Windows:
 /*To Dos*/
 - deploy in heroku
 
-Some of the things I did for the project:
+What I did for the project:
 - changed hbs to pug;
 - changed the design pattern to a clearer one;
 - fixed error catching; 
@@ -42,3 +42,7 @@ Some of the things I did for the project:
 - commented everything;
 - added unique-username functionality;
 - user can delete himself and admin can delete any user;
+- validated username and email;
+- implemented VGeorgiev1's idea for random images because
+  there isn't enough time till the deadline to wait for him
+  to implement it himself

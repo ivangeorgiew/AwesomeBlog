@@ -12,6 +12,13 @@ const registerGet = function(req, res) {
 };
 
 const registerPost = function(req, res) {
+  //valid username
+  if(!/^[a-z0-9]*$/.test(req.body.username))
+    return res.render('register', {info: 'Username must contain only a-z and 0-9'});
+  //valid email
+  if(!/^[a-zA-Z0-9.@_-]*$/.test(req.body.email))
+    return res.render('register', {info: 'Email is invalid'});
+
   return User.findOne({email: req.body.email}, function(error, user) {
     if(error) {
       console.log(error);
@@ -36,6 +43,7 @@ const registerPost = function(req, res) {
       
       //if image is uploaded
       if(req.files.image) {
+        req.files.image.name = req.body.username + req.files.image.name;
         req.files.image.mv(`./public/images/${req.files.image.name}`, function(error) {
           if(error){
             console.log(error);
