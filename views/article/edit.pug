@@ -3,7 +3,7 @@ extends ../layout
 block content
   .container.body-content
     .well
-      form.form-horizontal(method='POST', action='/article/edit/' + id)
+      form.form-horizontal(enctype='multipart/form-data' method='POST', action='/article/edit/' + id)
         fieldset
           legend Edit Article
           .form-group
@@ -14,6 +14,10 @@ block content
             label.col-sm-4.control-label Content
             .col-sm-6
               textarea.form-control(maxlength='150', rows='5', name='content', required)= content
+          .form-group
+             label.col-sm-4.control-label Profile Picture:
+             .col-sm-6
+              input.form-control(type='file', name='image')
           .form-group
             .col-sm-4.col-sm-offset-4
               button.btn.btn-success(type='submit', href='/article/edit/' + id) Edit

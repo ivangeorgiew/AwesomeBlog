@@ -107,7 +107,7 @@ app.use('/user', userRouter);
 
 /* SERVER */
 const server = http.createServer(app);
-const port = 3000;
+const port = 5002;
 
 //error handling
 server.on('error', function(error) {
