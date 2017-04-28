@@ -65,7 +65,7 @@ User.findOne({email: adminEmail}, function(error, admin) {
           articles: [],
           roles: [adminRole.id, userRole.id],
           salt: salt,
-          profileImage: '/images/profilepictures/maleDefault.jpg',
+          profileImage: '/images/profile/maleDefault.jpg',
           gender:'Male'
         };
 

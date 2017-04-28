@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const Article = require('mongoose').model('Article');
 const User = require('mongoose').model('User');
-const encrypt = require('./../utils/encrypt');
 const fs = require('fs');
 
 
@@ -21,28 +20,20 @@ const createPost = function(req, res) {
   if(!req.body.content)
     return res.render('article/create', {info: 'You didn\'t enter content!'});
 
-  //for the article object
+
+  //if image is given
+  if(req.files.image) {
+    req.files.image.name = req.user.username + req.files.image.name;
+    req.files.image.mv(`./public/images/articles/${req.files.image.name}`, function(error) {
+      if(error)
+        console.log(error);
+    });
+    req.body.picture = `/images/articles/${req.files.image.name}`;
+  }
+
+  //for the article creation
   req.body.author = req.user.id;
 
-    if(req.files.image) {
-
-        let index=req.files.image.name.lastIndexOf('.');
-        let name=req.files.image.name.substring(0,index);
-        let extension=req.files.image.name.substring(index+1);
-        let randomChars=encrypt.generateSalt().substring(0,5);
-        var filename=`${name}_${randomChars}.${extension}`;
-        let indexoferror=filename.lastIndexOf('/');
-        if(indexoferror!=-1){
-            filename.replace("/", "M");
-        }
-        req.files.image.mv(`./public/images/articlepictures/${filename}`, function(error) {
-            if(error){
-                console.log(error);
-                return res.render('register', {info: 'Cant move img'});
-            }
-        });
-        req.body.picture=`/images/articlepictures/${filename}`;
-    }
   return Article.create(req.body, function(error, article) {
     if(error) {
       console.log(error);
@@ -79,76 +70,66 @@ const editGet = function(req, res) {
 };
 
 const editPost = function(req, res) {
-    if (!req.isAuthenticated())
-        return res.redirect('/');
-    if (req.files.image) {
+  if (!req.isAuthenticated())
+    return res.redirect('/');
 
-        Article.findById(req.params.id).then(article => {
+  if (req.files.image) {
+    return Article.findById(req.params.id, function(error, article) {
+      if(error) {
+        console.log(error);
+        return res.render('user/edit', {info: 'Database error'});
+      }
+      fs.unlink(`./public${article.picture}`, function(error) {
+        if(error)
+          console.log(error);
+      });
 
-            fs.unlink(`./public${article.picture}`,
-                function(error) {
-                    if(error)
-                        console.log(error);
-                });
-        });
+      req.files.image.name = article.id + req.files.image.name;
+      req.files.image.mv(`./public/images/articles/${req.files.image.name}`, function(error) {
+        if(error)
+          console.log(error);
+      });
 
-        let index = req.files.image.name.lastIndexOf('.');
-        let name = req.files.image.name.substring(0, index);
-        let extension = req.files.image.name.substring(index + 1);
-        let randomChars = encrypt.generateSalt().substring(0, 5);
-        var filename = `${name}_${randomChars}.${extension}`;
-        let indexoferror=filename.lastIndexOf('/');
-        if(indexoferror!=-1){
-          filename.replace("/", "M");
+      //for article updating
+      req.body.image = `/images/articles/${req.files.image.name}`;
+
+      return Article.update({_id: req.params.id}, {
+        $set: {
+          title: req.body.title,
+          content: req.body.content,
+          picture: req.body.image
         }
-        req.body.image = `/images/articlepictures/${filename}`;
-
-        req.files.image.mv(`./public/images/articlepictures/${filename}`, function(error) {
-            if(error) {
-                console.log(error);
-                return res.render('user/edit', {info: 'Cant move img'});
-            }
+      }, function (error) {
+        if (error) {
+          console.log(error);
+          return res.render('index', {info: 'Database error'});
+        }
+        //updates the article and sets the new data to be visible
+        return res.render('article/edit', {
+          info: 'Updated article!',
+          title: req.body.title,
+          content: req.body.content
         });
-        return Article.update({_id: req.params.id}, {
-            $set: {
-                title: req.body.title,
-                content: req.body.content,
-                picture: req.body.image
-            }
-        }, function (error) {
-            if (error) {
-                console.log(error);
-                return res.render('index', {info: 'Database error'});
-            }
-            //updates the article and sets the new data to be visible
-            return res.render('article/edit', {
-                    info: 'Updated article!',
-                    title: req.body.title, content: req.body.content
-                }
-            );
-        })
-    }
-    else {
+      });
+    });
+  }
 
-        return Article.update({_id: req.params.id}, {
-            $set: {
-                title: req.body.title,
-                content: req.body.content,
-            }
-        }, function (error) {
-            if (error) {
-                console.log(error);
-                return res.render('index', {info: 'Database error'});
-            }
-            //updates the article and sets the new data to be visible
-            return res.render('article/edit', {
-                    info: 'Updated article!',
-                    title: req.body.title, content: req.body.content
-                }
-            );
-        });
+  return Article.update({_id: req.params.id}, {
+    $set: {
+      title: req.body.title,
+      content: req.body.content,
     }
-
+  }, function (error) {
+    if (error) {
+      console.log(error);
+      return res.render('index', {info: 'Database error'});
+    }
+    //updates the article and sets the new data to be visible
+    return res.render('article/edit', {
+      info: 'Updated article!',
+      title: req.body.title, content: req.body.content
+    })
+  });
 };
 
 
@@ -184,15 +165,19 @@ const deleteGet = function(req, res) {
     }); 
   });
 };
-const details=function (req,res) {
-    let id = req.params.id;
-
-    Article.findById(id).populate('author').then(article => {
 
 
-        res.render('article/details', article);
-    });
 
+
+/* DETAILS */
+const details = function(req,res) {
+  Article.findById(req.params.id).populate('author').exec(function(error, article) {
+    if(error) {
+      console.log(error);
+      return res.render('index', {info: 'Database error'});
+    }
+    return res.render('article/details', {article});
+  });
 };
 
 

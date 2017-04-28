@@ -56,27 +56,21 @@ const editPost = function(req, res) {
   //img update function
   const updateImg = function() {
     //removes old image
-    if(req.user.profileImage !== '/images/profilepictures/maleDefault.jpg' && req.user.profileImage !== '/images/profilepictures/femaleDefault.jpg') {
-      fs.unlink(`./public${req.user.profileImage}`,
-        function(error) {
+    if(req.user.profileImage !== '/images/profile/maleDefault.jpg' && req.user.profileImage !== '/images/profile/femaleDefault.jpg') {
+      fs.unlink(`./public${req.user.profileImage}`, function(error) {
         if(error)
           console.log(error);
       });
     }
+
     //moves the new image
-      let index=req.files.image.name.lastIndexOf('.');
-      let name=req.files.image.name.substring(0,index);
-      let extension=req.files.image.name.substring(index+1);
-      let randomChars=encrypt.generateSalt().substring(0,5);
-      var filename=`${name}_${randomChars}.${extension}`;
-    img.mv(`./public/images/profilepictures/${filename}`, function(error) {
-      if(error) {
+    img.name = req.user.id + img.name; 
+    img.mv(`./public/images/profile/${img.name}`, function(error) {
+      if(error)
         console.log(error);
-        return res.render('user/edit', {info: 'Cant move img'});
-      }
     });
 
-    User.update({_id: req.user.id}, {$set: {profileImage: `/images/profilepictures/${filename}`}},
+    User.update({_id: req.user.id}, {$set: {profileImage: `/images/profile/${img.name}`}},
       function(error) {
       if(error) {
         console.log(error);

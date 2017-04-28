@@ -1,17 +1,17 @@
 extends ../layout
 
 block content
-    .container.body-content
-        .row
-            article.col-md-6
-                header
-                    img(src=author.profileImage, height='200px')
-                    h2= title
-                    .content
-                    p= content
-                if picture
-                         img(src=picture , width='1800px' , height='1300px')
-                h2.author= author.username
-                footer
-                a.btn.btn-default.btn-md(href='/') Back &raquo;
+  .container.body-content
+    .row
+      article.col-md-6
+        header
+          img.details(src=article.author.profileImage)
+          h2= article.title
+        .content
+          p= article.content
+          if article.picture
+            img(src=article.picture)
+        h2.author= article.author.username
+        footer
+          a.btn.btn-default.btn-md(href='/') Back &raquo;
 

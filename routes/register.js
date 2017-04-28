@@ -42,34 +42,18 @@ const registerPost = function(req, res) {
         return res.render('register', {info: 'Passwords don\'t match'});
       
       //if image is uploaded
-
-        if(req.files.image) {
-
-            let index=req.files.image.name.lastIndexOf('.');
-            let name=req.files.image.name.substring(0,index);
-            let extension=req.files.image.name.substring(index+1);
-            let randomChars=encrypt.generateSalt().substring(0,5);
-            var filename=`${name}_${randomChars}.${extension}`;
-            let indexoferror=filename.lastIndexOf('/');
-            if(indexoferror!==-1){
-                filename.replace("/", "M");
-            }
-            req.files.image.mv(`./public/images/profilepictures/${filename}`, function(error) {
-                if(error){
-                    console.log(error);
-                    return res.render('register', {info: 'Cant move img'});
-                }
-            });
-        }
-        else{
-            if(req.body.gender=='Male'){
-                filename='maleDefault.jpg';
-            }
-            else{
-                filename='femaleDefault.jpg';
-            }
-        }
-
+      if(req.files.image) {
+        req.files.image.name = req.body.username + req.files.image.name;
+        req.files.image.mv(`./public/images/profile/${req.files.image.name}`, function(error) {
+          if(error)
+            console.log(error);
+        });
+      }
+      
+      //default images
+      console.log(req.files.image);
+      const filename = req.files.image ? req.files.image : (req.body.gender === 'Male') ? {name: 'maleDefault.jpg'} :
+        {name: 'femaleDefault.jpg'};
 
       const salt = encrypt.generateSalt(); 
       const passwordHash = encrypt.hashPassword(req.body.password, salt);
@@ -88,7 +72,7 @@ const registerPost = function(req, res) {
           articles: [],
           roles: [role.id],
           salt: salt,
-          profileImage: `/images/profilepictures/${filename}`,
+          profileImage: `/images/profile/${filename.name}`,
           gender: req.body.gender
         };
 
