@@ -44,15 +44,17 @@ const registerPost = function(req, res) {
       //if image is uploaded
       if(req.files.image) {
         req.files.image.name = req.body.username + req.files.image.name;
-        req.files.image.mv(`./public/images/${req.files.image.name}`, function(error) {
-          if(error){
+        req.files.image.mv(`./public/images/profile/${req.files.image.name}`, function(error) {
+          if(error)
             console.log(error);
-            return res.render('register', {info: 'Cant move img'});
-          }
         });
       }
+      
+      //default images
+      console.log(req.files.image);
+      const filename = req.files.image ? req.files.image : (req.body.gender === 'Male') ? {name: 'maleDefault.jpg'} :
+        {name: 'femaleDefault.jpg'};
 
-      const img = req.files.image || {name: 'default.jpg'};
       const salt = encrypt.generateSalt(); 
       const passwordHash = encrypt.hashPassword(req.body.password, salt);
 
@@ -70,7 +72,8 @@ const registerPost = function(req, res) {
           articles: [],
           roles: [role.id],
           salt: salt,
-          profileImage: `/images/${img.name}`
+          profileImage: `/images/profile/${filename.name}`,
+          gender: req.body.gender
         };
 
         //create user
@@ -88,7 +91,7 @@ const registerPost = function(req, res) {
               return res.render('register', {info: 'Database error'});
             }
             //success
-            return res.render('register', {info: 'Successfuly registered'});
+            return res.redirect('login');
           });
         });
       });

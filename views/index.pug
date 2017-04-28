@@ -10,9 +10,13 @@ block content
               img(src=val.author.profileImage)
               h2= val.title
             .content
-              p= val.content
+              if val.content.length > 25
+                p= val.content.substr(0,50)+"..."
+              else
+                p= val.content
             h2.author= val.author.username
+            br
+            a.btn.btn-default.btn-md(href='/article/details/'+val.id) Details &raquo;
             if user
               if user.email === val.author.email || user.roles[1]
-                footer
-                  a.btn.btn-default.btn-md(href='/article/edit/' + val.id) Change &raquo;
+                a.btn.btn-default.btn-md(href='/article/edit/' + val.id) Edit &raquo;
