@@ -9,6 +9,7 @@ const createGet = function(req, res) {
   if(!req.isAuthenticated())
     return res.redirect('/');
 
+  console.log(res);
   return res.render('article/create');
 };
 

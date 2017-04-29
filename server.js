@@ -36,8 +36,6 @@ require('./models/User');
 mongoose.connect(db[env], function(error){
   if(error)
     console.log('Error connection to db: ' + error);
-  else
-    console.log('MongoDB ready at: ' + db[env]);
 });
 
 
@@ -131,3 +129,5 @@ server.on('error', function(error) {
 server.listen(port, function() {
   console.log(`Listening on port ${port}`);
 });
+
+module.exports = app;
