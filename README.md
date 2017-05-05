@@ -1,26 +1,23 @@
-Blog for SoftUni - a team effort :) 
+Blog for SoftUni - a team effort :)
+
 ### Installation
+
 If you are using MacOs :
-1)`cd /*your directory*/`
-2)`git clone https://github.com/ivangeorgiew/awesomeblog.git`
-3)`npm i`
-4)`npm i -g nodemon`
-5)`mongod`
-6)`npm run dev` OR `npm run test`
+1) `cd /*your directory*/`
+2) `git clone https://github.com/ivangeorgiew/awesomeblog.git`
+3) `npm i`
+4) `npm i -g nodemon`
+5) `mongod`
+6) `npm run dev` OR `npm run test`
 
 
 If you are using Windows:
 
-6)`SET NODE_ENV=development` OR `=test` 
-7)`nodemon ./server.js`
+6) `SET NODE_ENV=development` OR `=test` 
+7) `nodemon ./server.js`
 
 
 
-
-
-
-/*To Dos*/
-- deploy in heroku
 
 What I did for the project:
 - changed hbs to pug;
